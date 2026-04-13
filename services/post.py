@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, UTC
 from database import database
 from databases.interfaces import Record
 from fastapi import HTTPException, status
@@ -13,7 +13,7 @@ class PostService:
     async def create(self, post: PostIn) -> int:
         data = post.model_dump()
         if data.get("published_at") is None:
-            data["published_at"] = datetime.now()
+            data["published_at"] = datetime.now(UTC)
         command = posts.insert().values(**data)
         return await database.execute(command)
 
